@@ -60,8 +60,14 @@ public class V4_0_MenuConfigUpgradeTask extends YamlUpgradeTask {
 
     private void upgradeIcon(ConfigSection section) {
         expandInlineList(section, AttributeType.ENCHANTMENTS.getConfigKey(), ";");
-        expandInlineList(section, AttributeType.ACTIONS.getConfigKey(), legacyCommandSeparator);
-        updateActionPrefixes(section, AttributeType.ACTIONS.getConfigKey());
+        expandInlineList(section, AttributeType.LEFT_ACTIONS.getConfigKey(), legacyCommandSeparator);
+        updateActionPrefixes(section, AttributeType.LEFT_ACTIONS.getConfigKey());
+        expandInlineList(section, AttributeType.RIGHT_ACTIONS.getConfigKey(), legacyCommandSeparator);
+        updateActionPrefixes(section, AttributeType.RIGHT_ACTIONS.getConfigKey());
+        expandInlineList(section, AttributeType.SHIFT_LEFT_ACTIONS.getConfigKey(), legacyCommandSeparator);
+        updateActionPrefixes(section, AttributeType.SHIFT_LEFT_ACTIONS.getConfigKey());
+        expandInlineList(section, AttributeType.SHIFT_RIGHT_ACTIONS.getConfigKey(), legacyCommandSeparator);
+        updateActionPrefixes(section, AttributeType.SHIFT_RIGHT_ACTIONS.getConfigKey());
         expandSingletonList(section, AttributeType.REQUIRED_ITEMS.getConfigKey());
         expandInlineItemstack(section);
     }

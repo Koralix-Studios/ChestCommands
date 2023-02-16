@@ -36,7 +36,10 @@ public class InternalConfigurableIcon extends BaseConfigurableIcon implements Re
     private RequiredExpLevel requiredExpLevel;
     private RequiredItems requiredItems;
 
-    private ImmutableList<Action> clickActions;
+    private ImmutableList<Action> leftActions;
+    private ImmutableList<Action> rightActions;
+    private ImmutableList<Action> leftShiftActions;
+    private ImmutableList<Action> rightShiftActions;
     private ClickResult clickResult;
 
     public InternalConfigurableIcon(Material material) {
@@ -89,8 +92,20 @@ public class InternalConfigurableIcon extends BaseConfigurableIcon implements Re
         }
     }
 
-    public void setClickActions(List<Action> clickActions) {
-        this.clickActions = CollectionUtils.newImmutableList(clickActions);
+    public void setLeftActions(List<Action> clickActions) {
+        this.leftActions = CollectionUtils.newImmutableList(clickActions);
+    }
+
+    public void setRightActions(List<Action> clickActions) {
+        this.rightActions = CollectionUtils.newImmutableList(clickActions);
+    }
+
+    public void setLeftShiftActions(List<Action> clickActions) {
+        this.leftShiftActions = CollectionUtils.newImmutableList(clickActions);
+    }
+
+    public void setRightShiftActions(List<Action> clickActions) {
+        this.rightShiftActions = CollectionUtils.newImmutableList(clickActions);
     }
     
     
@@ -115,14 +130,21 @@ public class InternalConfigurableIcon extends BaseConfigurableIcon implements Re
     }
 
     @Override
-    public void onClick(@NotNull MenuView menuView, @NotNull Player player) {
-        ClickResult clickResult = onClickGetResult(menuView, player);
+    public void onLeftClick(@NotNull MenuView menuView, @NotNull Player player, boolean shift) {
+        ClickResult clickResult = onClickGetResult(menuView, player, false, shift);
         if (clickResult == ClickResult.CLOSE) {
             menuView.close();
         }
     }
 
-    private ClickResult onClickGetResult(@NotNull MenuView menuView, @NotNull Player player) {
+    public void onRightClick(@NotNull MenuView menuView, @NotNull Player player, boolean shift) {
+        ClickResult clickResult = onClickGetResult(menuView, player, true, shift);
+        if (clickResult == ClickResult.CLOSE) {
+            menuView.close();
+        }
+    }
+
+    private ClickResult onClickGetResult(@NotNull MenuView menuView, @NotNull Player player, boolean right, boolean shift) {
         if (!IconPermission.hasPermission(player, viewPermission)) {
             return ClickResult.KEEP_OPEN;
         }
@@ -151,12 +173,40 @@ public class InternalConfigurableIcon extends BaseConfigurableIcon implements Re
 
         boolean hasOpenMenuAction = false;
 
-        if (clickActions != null) {
-            for (Action action : clickActions) {
-                action.execute(player);
+        if (right && rightActions != null) {
+            if (shift) {
+                for (Action action : rightShiftActions) {
+                    action.execute(player);
 
-                if (action instanceof OpenMenuAction) {
-                    hasOpenMenuAction = true;
+                    if (action instanceof OpenMenuAction) {
+                        hasOpenMenuAction = true;
+                    }
+                }
+            } else {
+                for (Action action : rightActions) {
+                    action.execute(player);
+
+                    if (action instanceof OpenMenuAction) {
+                        hasOpenMenuAction = true;
+                    }
+                }
+            }
+        } else if (leftActions != null) {
+            if (shift) {
+                for (Action action : leftShiftActions) {
+                    action.execute(player);
+
+                    if (action instanceof OpenMenuAction) {
+                        hasOpenMenuAction = true;
+                    }
+                }
+            } else {
+                for (Action action : leftActions) {
+                    action.execute(player);
+
+                    if (action instanceof OpenMenuAction) {
+                        hasOpenMenuAction = true;
+                    }
                 }
             }
         }

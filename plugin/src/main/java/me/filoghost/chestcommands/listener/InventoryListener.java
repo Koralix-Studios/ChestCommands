@@ -81,7 +81,10 @@ public class InventoryListener implements Listener {
         // Only handle the click AFTER the event has finished
         Bukkit.getScheduler().runTask(ChestCommands.getInstance(), () -> {
             try {
-                icon.onClick(menuView, clicker);
+                if (event.isLeftClick())
+                    icon.onLeftClick(menuView, clicker, event.isShiftClick());
+                else if (event.isRightClick())
+                    icon.onRightClick(menuView, clicker, event.isShiftClick());
             } catch (Throwable t) {
                 handleIconClickException(clicker, menuView.getMenu(), t);
                 menuView.close();

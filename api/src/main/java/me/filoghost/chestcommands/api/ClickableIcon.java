@@ -12,7 +12,7 @@ import org.jetbrains.annotations.Nullable;
 /**
  * Common interface extended by other interfaces, represents a simplified {@link Icon} with a settable click handler.
  * <p>
- * This interface exists to avoid having to implement {@link Icon#onClick(MenuView, Player)} via subclassing.
+ * This interface exists to avoid having to implement {@link Icon#onLeftClick(MenuView, Player, boolean)} and {@link Icon#onRightClick(MenuView, Player, boolean)} via subclassing.
  *
  * @see ConfigurableIcon
  * @see StaticIcon
@@ -39,15 +39,30 @@ public interface ClickableIcon extends Icon {
     /**
      * {@inheritDoc}
      * <p>
-     * This default implementation delegates the click event to the current click handler. This method should not be
+     * This default implementation delegates the left-click event to the current click handler. This method should not be
      * overridden.
      *
      * @since 1
      */
     @Override
-    default void onClick(@NotNull MenuView menuView, @NotNull Player clicker) {
+    default void onLeftClick(@NotNull MenuView menuView, @NotNull Player clicker, boolean shift) {
         if (getClickHandler() != null) {
-            getClickHandler().onClick(menuView, clicker);
+            getClickHandler().onLeftClick(menuView, clicker, shift);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     * <p>
+     * This default implementation delegates the right-click event to the current click handler. This method should not be
+     * overridden.
+     *
+     * @since 1
+     */
+    @Override
+    default void onRightClick(@NotNull MenuView menuView, @NotNull Player clicker, boolean shift) {
+        if (getClickHandler() != null) {
+            getClickHandler().onRightClick(menuView, clicker, shift);
         }
     }
 

@@ -29,8 +29,8 @@ public class V4_0_MenuRawTextFileUpgradeTask extends RegexUpgradeTask {
         replaceOldAttribute("DATA-VALUE", AttributeType.DURABILITY);
         replaceOldAttribute("NBT", AttributeType.NBT_DATA);
         replaceOldAttribute("ENCHANTMENT", AttributeType.ENCHANTMENTS);
-        replaceOldAttribute("COMMAND", AttributeType.ACTIONS);
-        replaceOldAttribute("COMMANDS", AttributeType.ACTIONS);
+        replaceOldAttribute("COMMAND", AttributeType.LEFT_ACTIONS);
+        replaceOldAttribute("COMMANDS", AttributeType.LEFT_ACTIONS);
         replaceOldAttribute("REQUIRED-ITEM", AttributeType.REQUIRED_ITEMS);
     }
 

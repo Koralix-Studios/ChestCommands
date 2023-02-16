@@ -52,7 +52,7 @@ spawn-command:
   NAME: '&e/spawn'
   LORE:
     - 'Makes the player run the /spawn command.'
-  ACTIONS:
+  LEFT-ACTIONS:
     - 'spawn'
 
 
@@ -94,7 +94,7 @@ command-from-console:
   NAME: '&cRuns command from the console.'
   LORE:
     - 'It broadcasts your name with the command /say.'
-  ACTIONS:
+  LEFT-ACTIONS:
     - 'console: say Hello {player}!'
 
 
@@ -106,7 +106,7 @@ command-as-op:
   LORE:
     - 'Be careful with this type of commands.'
     - 'It will ignore nearly all the permission checks.'
-  ACTIONS:
+  LEFT-ACTIONS:
     - 'op: say Hello world!'
 
 
@@ -118,7 +118,7 @@ placeholders:
   LORE:
     - 'This icon''s actions contain placeholders'
     - 'that will be replaced when the icon is clicked.'
-  ACTIONS:
+  LEFT-ACTIONS:
     - 'tell: &9Online players: &f{online}/{max_players}'
     - 'tell: &9Your name: &f{player}'
     - 'tell: &9The world you are in: &f{world}'
@@ -137,7 +137,7 @@ economy-give:
     - ''
     - 'Current money: {money}'
   PRICE: 50
-  ACTIONS:
+  LEFT-ACTIONS:
     - 'tell: &aYou have paid 50$'
     - 'give: gold ingot'
   KEEP-OPEN: true
@@ -154,7 +154,7 @@ economy-take:
     - 'Current money: {money}'
   REQUIRED-ITEMS:
     - gold ingot
-  ACTIONS:
+  LEFT-ACTIONS:
     - 'tell: &aYou have been paid 50$'
     - 'give-money: 50'
   KEEP-OPEN: true
@@ -193,7 +193,7 @@ chat-message:
   NAME: '&3Chat message'
   LORE:
     - 'Sends a chat message without commands.'
-  ACTIONS:
+  LEFT-ACTIONS:
     - 'tell: This is a simple message, without using commands.'
 
 
@@ -209,7 +209,7 @@ permission:
     - 'message will be displayed.'
   PERMISSION: chestcommands.test
   PERMISSION-MESSAGE: 'You don''t have the correct permission.'
-  ACTIONS:
+  LEFT-ACTIONS:
     - 'tell: &a✔ You have the correct permission.'
 
 

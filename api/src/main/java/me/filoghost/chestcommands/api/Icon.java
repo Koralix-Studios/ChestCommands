@@ -32,12 +32,23 @@ public interface Icon {
     @Nullable ItemStack render(@NotNull Player viewer);
 
     /**
-     * Called when a player clicks on the icon.
+     * Called when a player left-clicks on the icon.
      *
      * @param menuView the menu view associated with the player that clicked an icon
      * @param clicker  the player that clicked an icon
+     * @param shift    true if the player performs shift+click
      * @since 1
      */
-    void onClick(@NotNull MenuView menuView, @NotNull Player clicker);
+    void onLeftClick(@NotNull MenuView menuView, @NotNull Player clicker, boolean shift);
+
+    /**
+     * Called when a player right-clicks on the icon.
+     *
+     * @param menuView the menu view associated with the player that clicked an icon
+     * @param clicker  the player that clicked an icon
+     * @param shift    true if the player performs shift+click
+     * @since 1
+     */
+    void onRightClick(@NotNull MenuView menuView, @NotNull Player clicker, boolean shift);
 
 }

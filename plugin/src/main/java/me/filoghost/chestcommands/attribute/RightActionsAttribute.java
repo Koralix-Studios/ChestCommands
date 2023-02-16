@@ -5,8 +5,6 @@
  */
 package me.filoghost.chestcommands.attribute;
 
-import java.util.ArrayList;
-import java.util.List;
 import me.filoghost.chestcommands.action.Action;
 import me.filoghost.chestcommands.action.DisabledAction;
 import me.filoghost.chestcommands.icon.InternalConfigurableIcon;
@@ -14,11 +12,14 @@ import me.filoghost.chestcommands.logging.Errors;
 import me.filoghost.chestcommands.parsing.ActionParser;
 import me.filoghost.chestcommands.parsing.ParseException;
 
-public class ActionsAttribute implements IconAttribute {
+import java.util.ArrayList;
+import java.util.List;
+
+public class RightActionsAttribute implements IconAttribute {
 
     private final List<Action> actions;
 
-    public ActionsAttribute(List<String> serializedActions, AttributeErrorHandler errorHandler) {
+    public RightActionsAttribute(List<String> serializedActions, AttributeErrorHandler errorHandler) {
         actions = new ArrayList<>();
 
         for (String serializedAction : serializedActions) {
@@ -38,7 +39,7 @@ public class ActionsAttribute implements IconAttribute {
 
     @Override
     public void apply(InternalConfigurableIcon icon) {
-        icon.setClickActions(actions);
+        icon.setRightActions(actions);
     }
 
 }
