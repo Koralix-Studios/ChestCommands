@@ -15,3 +15,5 @@ nbproject/
 
 # OS X
 .DS_Store
+
+run/
