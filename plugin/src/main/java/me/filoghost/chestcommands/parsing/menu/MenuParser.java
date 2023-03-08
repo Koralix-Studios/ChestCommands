@@ -8,6 +8,8 @@ package me.filoghost.chestcommands.parsing.menu;
 import me.filoghost.chestcommands.action.Action;
 import me.filoghost.chestcommands.action.DisabledAction;
 import me.filoghost.chestcommands.attribute.PositionAttribute;
+import me.filoghost.chestcommands.icon.CyclicIcon;
+import me.filoghost.chestcommands.icon.InternalConfigurableIcon;
 import me.filoghost.chestcommands.logging.Errors;
 import me.filoghost.chestcommands.menu.InternalMenu;
 import me.filoghost.chestcommands.parsing.ActionParser;
@@ -25,8 +27,7 @@ import me.filoghost.fcommons.config.exception.MissingConfigValueException;
 import me.filoghost.fcommons.logging.ErrorCollector;
 import org.bukkit.ChatColor;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.Map.Entry;
 
 public class MenuParser {
@@ -38,14 +39,37 @@ public class MenuParser {
 
         InternalMenu menu = new InternalMenu(menuSettings.getTitle(), menuSettings.getRows(), menuConfig.getSourceFile());
 
+        Map<IconPositions, List<InternalConfigurableIcon>> collisions = new HashMap<>();
+
         for (IconSettings iconSettings : iconSettingsList) {
             tryAddIconToMenu(menu, iconSettings, errorCollector);
+            IconPositions positions = getPositions(iconSettings);
+            if (!collisions.containsKey(positions))
+                collisions.put(positions, new LinkedList<>());
+            collisions.get(positions).add((InternalConfigurableIcon) menu.getIcon(positions.getX(), positions.getY()));
+        }
+
+        for (Entry<IconPositions, List<InternalConfigurableIcon>> icons: collisions.entrySet()) {
+            if (icons.getValue().size() > 1)
+                menu.setIcon(icons.getKey().getX(), icons.getKey().getY(), menuIconsToCyclicIcon(icons.getValue()));
         }
 
         menu.setRefreshTicks(menuSettings.getRefreshTicks());
         menu.setOpenActions(menuSettings.getOpenActions());
 
         return new LoadedMenu(menu, menuConfig.getSourceFile(), menuSettings.getCommands(), menuSettings.getOpenItem());
+    }
+
+    public static IconPositions getPositions(IconSettings iconSettings) {
+        PositionAttribute positionX = (PositionAttribute) iconSettings.getAttributeValue(AttributeType.POSITION_X);
+        PositionAttribute positionY = (PositionAttribute) iconSettings.getAttributeValue(AttributeType.POSITION_Y);
+        int row = positionY.getPosition() - 1;
+        int column = positionX.getPosition() - 1;
+        return new IconPositions(row, column);
+    }
+
+    public static CyclicIcon menuIconsToCyclicIcon(List<InternalConfigurableIcon> iconSettings) {
+        return new CyclicIcon(iconSettings);
     }
 
 
@@ -87,10 +111,6 @@ public class MenuParser {
 
         if (invalidPosition) {
             return;
-        }
-
-        if (menu.getIcon(row, column) != null) {
-            errorCollector.add(Errors.Menu.iconOverridesAnother(iconSettings));
         }
 
         menu.setIcon(row, column, iconSettings.createIcon());
@@ -216,3 +236,5 @@ public class MenuParser {
     }
 
 }
+
+

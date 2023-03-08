@@ -235,6 +235,8 @@ public abstract class BaseConfigurableIcon implements Icon {
         cachedRendering = null;
     }
 
+
+
     public @Nullable String renderName(Player viewer) {
         if (name == null) {
             return null;

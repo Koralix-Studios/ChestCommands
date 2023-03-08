@@ -59,13 +59,33 @@ public class InternalConfigurableIcon extends BaseConfigurableIcon implements Re
     public void setClickPermission(String permission) {
         this.clickPermission = new IconPermission(permission);
     }
-    
+
+    public void setClickPermission(IconPermission permission) {
+        this.clickPermission = permission;
+    }
+
+    public IconPermission getClickPermission() {
+        return clickPermission;
+    }
+
+    public String getNoClickPermissionMessage() {
+        return noClickPermissionMessage;
+    }
+
     public void setNoClickPermissionMessage(String noClickPermissionMessage) {
         this.noClickPermissionMessage = noClickPermissionMessage;
     }
         
     public void setViewPermission(String viewPermission) {
         this.viewPermission = new IconPermission(viewPermission);
+    }
+
+    public void setViewPermission(IconPermission viewPermission) {
+        this.viewPermission = viewPermission;
+    }
+
+    public IconPermission getViewPermission() {
+        return viewPermission;
     }
 
     public void setRequiredMoney(double requiredMoney) {
@@ -76,6 +96,14 @@ public class InternalConfigurableIcon extends BaseConfigurableIcon implements Re
         }
     }
 
+    public void setRequiredMoney(RequiredMoney requiredMoney) {
+        this.requiredMoney = requiredMoney;
+    }
+
+    public RequiredMoney getRequiredMoney() {
+        return requiredMoney;
+    }
+
     public void setRequiredExpLevel(int requiredLevels) {
         if (requiredLevels > 0) {
             this.requiredExpLevel = new RequiredExpLevel(requiredLevels);
@@ -84,12 +112,28 @@ public class InternalConfigurableIcon extends BaseConfigurableIcon implements Re
         }
     }
 
+    public void setRequiredExpLevel(RequiredExpLevel requiredExpLevel) {
+        this.requiredExpLevel = requiredExpLevel;
+    }
+
+    public RequiredExpLevel getRequiredExpLevel() {
+        return requiredExpLevel;
+    }
+
     public void setRequiredItems(List<RequiredItem> requiredItems) {
         if (requiredItems != null) {
             this.requiredItems = new RequiredItems(requiredItems);
         } else {
             this.requiredItems = null;
         }
+    }
+
+    public void setRequiredItems(RequiredItems requiredItems) {
+        this.requiredItems = requiredItems;
+    }
+
+    public RequiredItems getRequiredItems() {
+        return requiredItems;
     }
 
     public void setLeftActions(List<Action> clickActions) {
@@ -107,8 +151,23 @@ public class InternalConfigurableIcon extends BaseConfigurableIcon implements Re
     public void setRightShiftActions(List<Action> clickActions) {
         this.rightShiftActions = CollectionUtils.newImmutableList(clickActions);
     }
-    
-    
+
+    public ImmutableList<Action> getLeftActions() {
+        return leftActions;
+    }
+
+    public ImmutableList<Action> getRightActions() {
+        return rightActions;
+    }
+
+    public ImmutableList<Action> getLeftShiftActions() {
+        return leftShiftActions;
+    }
+
+    public ImmutableList<Action> getRightShiftActions() {
+        return rightShiftActions;
+    }
+
     @Override
     public ItemStack render(@NotNull Player viewer) {
         if (canViewIcon(viewer)) {
@@ -129,18 +188,27 @@ public class InternalConfigurableIcon extends BaseConfigurableIcon implements Re
         this.clickResult = clickResult;
     }
 
+    public ClickResult getClickResult() {
+        return clickResult;
+    }
+
     @Override
     public void onLeftClick(@NotNull MenuView menuView, @NotNull Player player, boolean shift) {
         ClickResult clickResult = onClickGetResult(menuView, player, false, shift);
         if (clickResult == ClickResult.CLOSE) {
             menuView.close();
+        } else if (this instanceof CyclicIcon) {
+            ((CyclicIcon) this).next();
         }
     }
 
+    @Override
     public void onRightClick(@NotNull MenuView menuView, @NotNull Player player, boolean shift) {
         ClickResult clickResult = onClickGetResult(menuView, player, true, shift);
         if (clickResult == ClickResult.CLOSE) {
             menuView.close();
+        } else if (this instanceof CyclicIcon) {
+            ((CyclicIcon) this).prev();
         }
     }
 
@@ -215,7 +283,7 @@ public class InternalConfigurableIcon extends BaseConfigurableIcon implements Re
         menuView.refresh();
 
         // Force menu to stay open if actions open another menu
-        if (hasOpenMenuAction) {
+        if (hasOpenMenuAction || this instanceof CyclicIcon) {
             return ClickResult.KEEP_OPEN;
         } else {
             return clickResult;
